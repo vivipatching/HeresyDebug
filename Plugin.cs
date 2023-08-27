@@ -1,13 +1,26 @@
-﻿using BepInEx;
+﻿/*
+    HeresyDebug -- A Mod for Blasphemous 2
+    Copyright (C) 2023  vivienne (vivipatching)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, version 3 of the License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Il2CppSystem.Linq;
 using TGK.Framework.Quest;
 using TGK.Game.Managers;
-
-// HeresyDebug
-// Author: vivienne (vivipatching)
-// License: GPL-3
 
 namespace HeresyDebug;
 
@@ -17,15 +30,13 @@ public class Plugin : BasePlugin
     public override void Load()
     {
         Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-
         harmony.PatchAll();
-        // Plugin startup logic
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
     }
 }
 
 [HarmonyPatch(typeof(QuestManager))]
-[HarmonyPatch("GetQuestVariable")] // if possible use nameof() here
+[HarmonyPatch("GetQuestVariable")]
 [HarmonyPatch(new System.Type[] { typeof(int), typeof(int), typeof(string) })]
 class Patch01
 {
@@ -38,8 +49,8 @@ class Patch01
             {
                 questvar.currentValue = 0;
                 __result.currentValue = 0;
+                Il2CppSystem.Console.WriteLine("[YermaSvsonaSusonaSoftlockFix!] Applied! Hopefully progression works now??");
             }
-            Il2CppSystem.Console.WriteLine("[YermaSvsonaSusonaSoftlockFix!] Applied! Hopefully progression works now??");
         }
     }
 }
